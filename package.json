@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "host": "npx local-ssl-proxy --key www.localdomain.com-key.pem --cert www.localdomain.com.pem --source 443 --target 3000",
+    "host:create-ssl": "mkcert www.localdomain.com"
   },
   "dependencies": {
     "clsx": "^2.1.1",

@@ -7,6 +7,7 @@ import ResultsTitle from "@/components/Events/ResultsTitle";
 
 import { Event } from "@/lib/types";
 import { convertEventsToArray } from "@/lib/utils";
+import { getFilteredEvents } from "@/lib/dbService";
 
 export const getServerSideProps: GetServerSideProps<{ events: Event[] }> = async (
   context: GetServerSidePropsContext
@@ -24,8 +25,7 @@ export const getServerSideProps: GetServerSideProps<{ events: Event[] }> = async
   const year = slug[0];
   const month = slug[1];
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/events?year=${year}&month=${month}`);
-  const events = await res.json();
+  const events = await getFilteredEvents({ year, month });
 
   if (!events) {
     return {
@@ -37,7 +37,7 @@ export const getServerSideProps: GetServerSideProps<{ events: Event[] }> = async
 
   return {
     props: {
-      events: convertEventsToArray(events),
+      events,
     },
   };
 };

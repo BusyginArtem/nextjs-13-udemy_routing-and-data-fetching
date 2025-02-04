@@ -4,21 +4,15 @@ import EventList from "@/components/Events/EventList";
 import EventsSearch from "@/components/Events/EventsSearch";
 
 import { Event } from "@/lib/types";
-import { convertEventsToArray } from "@/lib/utils";
+import { getAllEvents } from "@/lib/dbService";
 
-export const getStaticProps: GetStaticProps<{ events: Event[] }> = async (context) => {
+export const getStaticProps: GetStaticProps<{ events: Event[] }> = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/events`);
-
-    if (!res.ok) {
-      throw new Error(`Failed to fetch events: ${res.statusText}`);
-    }
-
-    const events = await res.json();
+    const events = await getAllEvents();
 
     return {
       props: {
-        events: convertEventsToArray(events),
+        events,
       },
     };
   } catch (error) {

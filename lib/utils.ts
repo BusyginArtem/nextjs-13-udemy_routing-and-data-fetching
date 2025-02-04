@@ -2,13 +2,13 @@ import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ImageLoader } from "next/image";
 
-import { EventsRawData } from "./types";
+import { Event, EventsRawData } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function convertEventsToArray(events: EventsRawData) {
+export function convertEventsToArray(events: EventsRawData): Event[] {
   return Array.from(Object.keys(events), (k) => ({
     id: k,
     ...events[k],

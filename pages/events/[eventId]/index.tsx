@@ -4,15 +4,10 @@ import EventSummary from "@/components/EventDetail/event-summary";
 import EventLogistics from "@/components/EventDetail/event-logistics";
 import EventContent from "@/components/EventDetail/event-content";
 import { Event } from "@/lib/types";
+import { getAllEvents, getEventById } from "@/lib/dbService";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/events`);
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch events: ${res.statusText}`);
-  }
-
-  const events = await res.json();
+  const events = await getAllEvents();
 
   const paths = Object.keys(events).map((eventId) => ({
     params: { eventId },
@@ -33,8 +28,7 @@ export const getStaticProps: GetStaticProps<{ event: Event | null }> = async (co
     };
   }
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/events/${params.eventId}`);
-  const event: Event = await res.json();
+  const event = await getEventById({ id: params.eventId as string });
 
   if (!event) {
     return { notFound: true };
