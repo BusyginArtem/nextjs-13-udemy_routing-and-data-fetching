@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
 
 import type { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
@@ -6,7 +7,6 @@ import EventList from "@/components/Events/EventList";
 import ResultsTitle from "@/components/Events/ResultsTitle";
 
 import { Event } from "@/lib/types";
-import { convertEventsToArray } from "@/lib/utils";
 import { getFilteredEvents } from "@/lib/dbService";
 
 export const getServerSideProps: GetServerSideProps<{ events: Event[] }> = async (
@@ -57,6 +57,10 @@ export default function FilteredEvents({ events }: InferGetServerSidePropsType<t
 
   return (
     <>
+      <Head>
+        <title>{`Events for the chosen filter ${month}/${year}`}</title>
+        <meta name='description' content={`Events app | Events for the ${month}/${year} period`} />
+      </Head>
       <ResultsTitle year={year} month={month} />
 
       {isSearchParamsIncorrect ? (

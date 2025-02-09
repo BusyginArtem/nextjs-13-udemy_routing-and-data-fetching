@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 
 import EventSummary from "@/components/EventDetail/event-summary";
@@ -41,7 +42,7 @@ export const getStaticProps: GetStaticProps<{ event: Event | null }> = async (co
         id: params.eventId as string,
       },
     },
-    revalidate: 60,
+    revalidate: 60 * 5, // 300 five minutes
   };
 };
 
@@ -52,6 +53,10 @@ export default function EventDetailPage({ event }: InferGetStaticPropsType<typeo
 
   return (
     <>
+      <Head>
+        <title>{event.title}</title>
+        <meta name='description' content={`Events app | ${event.title}`} />
+      </Head>
       <EventSummary title={event.title} />
       <EventLogistics address={event.location} date={event.date} image={event.image} imageAlt={event.title} />
       <EventContent>

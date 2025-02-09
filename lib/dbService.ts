@@ -2,9 +2,13 @@ import { db } from "@/lib/firebaseAdmin";
 import { Event } from "./types";
 import { convertEventsToArray } from "./utils";
 
-export async function getAllEvents(): Promise<Event[]> {
-  const ref = db.ref("/events");
+export async function getAllEvents(pageSize: number = 5, startAfter: string | null = null): Promise<Event[]> {
+  let ref = db.ref("/events").orderByChild("date").limitToFirst(pageSize);
   let events: Event[] = [];
+
+  if (startAfter) {
+    ref = ref.startAfter(startAfter);
+  }
 
   const snapshot = await ref.once("value");
 
@@ -17,12 +21,16 @@ export async function getAllEvents(): Promise<Event[]> {
   return events;
 }
 
-export async function getFeaturedEvents(): Promise<Event[]> {
-  const ref = db.ref("/events");
+export async function getFeaturedEvents(pageSize: number = 5, startAfter: string | null = null): Promise<Event[]> {
+  let ref = db.ref("/events").orderByChild("isFeatured").equalTo(true).limitToFirst(pageSize);
 
   let events: Event[] = [];
 
-  const snapshot = await ref.orderByChild("isFeatured").equalTo(true).once("value");
+  if (startAfter) {
+    ref = ref.startAfter(startAfter);
+  }
+
+  const snapshot = await ref.once("value");
 
   if (snapshot.exists()) {
     const data = snapshot.val();

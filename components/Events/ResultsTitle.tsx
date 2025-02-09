@@ -1,7 +1,7 @@
 import LinkButton from "../ui/LinkButton";
 
 function ResultsTitle({ year, month }: { year: number; month: number }) {
-  const date = new Date(year, month);
+  const date = new Date(year, month - 1);
 
   const humanReadableDate = date.toLocaleDateString("en-US", {
     month: "long",

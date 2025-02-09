@@ -1,3 +1,4 @@
+import Head from "next/head";
 import type { InferGetStaticPropsType, GetStaticProps } from "next";
 
 import EventList from "@/components/Events/EventList";
@@ -13,10 +14,10 @@ export const getStaticProps: GetStaticProps<{ events: Event[] }> = async () => {
     return {
       props: {
         events,
+        revalidate: 60 * 60, // 3600 one hour
       },
     };
   } catch (error) {
-    console.error("Error fetching events:", error);
     return {
       props: {
         events: [],
@@ -28,6 +29,10 @@ export const getStaticProps: GetStaticProps<{ events: Event[] }> = async () => {
 export default function Events({ events }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
+      <Head>
+        <title>All events</title>
+        <meta name='description' content='Events app | All events' />
+      </Head>
       <EventsSearch />
       <EventList items={events} />
     </>
